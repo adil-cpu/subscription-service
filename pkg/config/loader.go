@@ -1,4 +1,3 @@
-// pkg/config/loader.go
 package config
 
 import (
@@ -8,21 +7,21 @@ import (
 	"github.com/joho/godotenv"
 )
 
-// Config хранит параметры, прочитанные из .env или окружения
+// храним параметры, прочитанные из .env или окружения
 type Config struct {
-	Port        string // Порт для HTTP-сервера, например ":8080"
-	PostgresDSN string // Строка подключения к Postgres
-	CorsOrigins string // Список разрешённых источников для CORS
+	Port        string
+	PostgresDSN string
+	CorsOrigins string
 }
 
-// Load пытается загрузить .env и собирает все переменные в Config
+// загржаем .env и собираем все переменные в Config
 func Load() *Config {
-	// Пытаемся прочитать файл .env в корне проекта
+	// читаем .env файл
 	if err := godotenv.Load(); err != nil {
-		log.Println("⚠ .env не найден, читаем переменные из окружения")
+		log.Println(".env не найден, читаем переменные из окружения")
 	}
 
-	// Если PORT не задан, по умолчанию ":8080"
+	// по умолчанию ":8080"
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = ":8080"
@@ -30,7 +29,7 @@ func Load() *Config {
 
 	return &Config{
 		Port:        port,
-		PostgresDSN: os.Getenv("POSTGRES_DSN"), // ожидаем формат postgres://user:pass@host:port/db?sslmode=disable
-		CorsOrigins: os.Getenv("CORS_ORIGINS"), // например "http://localhost:3000"
+		PostgresDSN: os.Getenv("POSTGRES_DSN"),
+		CorsOrigins: os.Getenv("CORS_ORIGINS"),
 	}
 }
