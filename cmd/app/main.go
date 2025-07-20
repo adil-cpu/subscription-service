@@ -3,7 +3,9 @@ package main
 import (
 	"github.com/adil-cpu/subscription-service/api"
 	"github.com/adil-cpu/subscription-service/pkg/config"
+	"github.com/adil-cpu/subscription-service/pkg/database"
 	"github.com/adil-cpu/subscription-service/pkg/logger"
+	"github.com/adil-cpu/subscription-service/pkg/models"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 )
@@ -12,6 +14,12 @@ func main() {
 	cfg := config.Load()
 	log := logger.New()
 
+	db := database.Connect(cfg)
+
+	if err := db.AutoMigrate(&models.Subscription{}); err != nil {
+		log.Fatal("ошибка миграции", zap.Error(err))
+	}
+
 	r := gin.New()
 
 	r.Use(
@@ -19,6 +27,7 @@ func main() {
 		logger.RecoveryMiddleware(log),
 	)
 
+	// Роуты
 	api.RegisterRoutes(r)
 
 	log.Info("запуск сервера", zap.String("port", cfg.Port))
