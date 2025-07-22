@@ -27,7 +27,7 @@ func main() {
 		logger.RecoveryMiddleware(log),
 	)
 
-	// Роуты
+	// роуты
 	api.RegisterRoutes(r)
 
 	log.Info("запуск сервера", zap.String("port", cfg.Port))
