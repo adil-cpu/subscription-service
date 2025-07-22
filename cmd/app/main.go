@@ -28,7 +28,7 @@ func main() {
 	)
 
 	// роуты
-	api.RegisterRoutes(r)
+	api.RegisterRoutes(r, db)
 
 	log.Info("запуск сервера", zap.String("port", cfg.Port))
 	if err := r.Run(cfg.Port); err != nil {
