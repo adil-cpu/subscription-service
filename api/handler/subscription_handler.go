@@ -11,10 +11,11 @@ import (
 
 // структура POST запроса
 type CreateSubscriptionRequest struct {
-	UserID    uint   `json:"user_id" binding:"required"`
-	Plan      string `json:"plan" binding:"required"`
-	StartDate string `json:"start_date"` // ISO 8601, пример: "2025-07-22T00:00:00Z"
-	EndDate   string `json:"end_date"`
+	UserID    uint    `json:"user_id" binding:"required"`
+	Plan      string  `json:"plan" binding:"required"`
+	Price     float64 `json:"price" binding:"required"`
+	StartDate string  `json:"start_date"` // ISO 8601, пример: "2025-07-22T00:00:00Z"
+	EndDate   string  `json:"end_date"`
 }
 
 // POST /subscriptions — создаем новую подписку
@@ -42,6 +43,7 @@ func CreateSubscriptionHandler(db *gorm.DB) gin.HandlerFunc {
 		sub := models.Subscription{
 			UserID:    req.UserID,
 			Plan:      req.Plan,
+			Price:     req.Price,
 			StartDate: start,
 			EndDate:   end,
 		}
