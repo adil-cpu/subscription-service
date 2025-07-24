@@ -14,11 +14,21 @@ type CreateSubscriptionRequest struct {
 	UserID    uint    `json:"user_id" binding:"required"`
 	Plan      string  `json:"plan" binding:"required"`
 	Price     float64 `json:"price" binding:"required"`
-	StartDate string  `json:"start_date"` // ISO 8601, пример: "2025-07-22T00:00:00Z"
+	StartDate string  `json:"start_date"` // ISO 8601
 	EndDate   string  `json:"end_date"`
 }
 
-// POST /subscriptions — создаем новую подписку
+// CreateSubscriptionHandler godoc
+// @Summary Создать подписку
+// @Description Создает новую подписку
+// @Tags subscriptions
+// @Accept json
+// @Produce json
+// @Param subscription body CreateSubscriptionRequest true "Данные подписки"
+// @Success 201 {object} models.Subscription
+// @Failure 400 {object} map[string]string
+// @Failure 500 {object} map[string]string
+// @Router /subscriptions [post]
 func CreateSubscriptionHandler(db *gorm.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var req CreateSubscriptionRequest
@@ -57,7 +67,14 @@ func CreateSubscriptionHandler(db *gorm.DB) gin.HandlerFunc {
 	}
 }
 
-// GET /subscriptions — получаем все подписки
+// GetAllSubscriptionsHandler godoc
+// @Summary Получить все подписки
+// @Description Возвращает список всех подписок
+// @Tags subscriptions
+// @Produce json
+// @Success 200 {array} models.Subscription
+// @Failure 500 {object} map[string]string
+// @Router /subscriptions [get]
 func GetAllSubscriptionsHandler(db *gorm.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var subs []models.Subscription
@@ -71,7 +88,19 @@ func GetAllSubscriptionsHandler(db *gorm.DB) gin.HandlerFunc {
 	}
 }
 
-// PUT /subscriptions/:id — обновляем подписку по ID
+// UpdateSubscriptionHandler godoc
+// @Summary Обновить подписку
+// @Description Обновляет данные подписки по ID
+// @Tags subscriptions
+// @Accept json
+// @Produce json
+// @Param id path int true "ID подписки"
+// @Param subscription body models.Subscription true "Обновлённые данные"
+// @Success 200 {object} models.Subscription
+// @Failure 400 {object} map[string]string
+// @Failure 404 {object} map[string]string
+// @Failure 500 {object} map[string]string
+// @Router /subscriptions/{id} [put]
 func UpdateSubscriptionHandler(db *gorm.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		id := c.Param("id")
@@ -101,7 +130,15 @@ func UpdateSubscriptionHandler(db *gorm.DB) gin.HandlerFunc {
 	}
 }
 
-// DELETE /subscriptions/:id — удаляем подписку по ID
+// DeleteSubscriptionHandler godoc
+// @Summary Удалить подписку
+// @Description Удаляет подписку по ID
+// @Tags subscriptions
+// @Produce json
+// @Param id path int true "ID подписки"
+// @Success 200 {object} map[string]string
+// @Failure 500 {object} map[string]string
+// @Router /subscriptions/{id} [delete]
 func DeleteSubscriptionHandler(db *gorm.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		id := c.Param("id")
